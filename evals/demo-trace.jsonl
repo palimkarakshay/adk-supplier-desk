@@ -1,0 +1,28 @@
+{"type": "user", "text": "Hi, when is the next delivery due on SA-55001 and has the ASN gone out?"}
+{"agent": "desk_router", "ms": 2, "tokens": 0, "type": "transfer", "to": "order_agent"}
+{"agent": "order_agent", "ms": 8230, "tokens": 1270, "type": "tool_call", "tool": "get_order_status", "args": {"order_id": "SA-55001", "supplier_id": "S-1042"}}
+{"agent": "order_agent", "ms": 8230, "tokens": 1270, "type": "tool_call", "tool": "list_asns", "args": {"order_id": "SA-55001", "supplier_id": "S-1042"}}
+{"agent": "order_agent", "ms": 6, "tokens": 0, "type": "tool_result", "tool": "get_order_status", "result": {"content": [{"type": "text", "text": "{\n  \"found\": true,\n  \"order_id\": \"SA-55001\",\n  \"part\": \"Bracket, rear door LH\",\n  \"qty_open\": 4800,\n  \"next_delivery\": \"2026-11-19\",\n  \"status\": \"firm\",\n  \"dock\": \"D4\"\n}"}], "isError": false}}
+{"agent": "order_agent", "ms": 6, "tokens": 0, "type": "tool_result", "tool": "list_asns", "result": {"content": [{"type": "text", "text": "{\n  \"asns\": [\n    {\n      \"asn\": \"ASN-90311\",\n      \"order_id\": \"SA-55001\",\n      \"qty\": 2400,\n      \"shipped\": \"2026-11-15\",\n      \"state\": \"in transit\"\n    },\n    {\n      \"asn\": \"ASN-90340\",\n      \"order_id\": \"SA-55001\",\n      \"qty\": 2400,\n      \"shipped\": null,\n      \"state\": \"not sent, due 2026-11-18 14:00\"\n    }\n  ]\n}"}], "isError": false}}
+{"agent": "order_agent", "ms": 1226, "tokens": 1666, "type": "text", "text": "The next delivery for scheduling agreement SA-55001 is due on 2026-11-19. Regarding the ASNs, ASN-90311 has shipped and is currently in transit, while ASN-90340 has not been sent yet and is due by 2026-11-18 at 14:00."}
+{"type": "turn_end", "tokens": 3397, "ms": 16822}
+{"type": "user", "text": "What happens if that ASN goes out late?"}
+{"agent": "order_agent", "ms": 0, "tokens": 0, "type": "transfer", "to": "policy_agent"}
+{"agent": "policy_writer", "ms": 1013, "tokens": 1675, "type": "tool_call", "tool": "search_policy", "args": {"query": "ASN late penalty consequences policy"}}
+{"agent": "policy_writer", "ms": 1, "tokens": 0, "type": "tool_result", "tool": "search_policy", "result": {"passages": [{"id": "P2", "title": "Late or missing ASN chargeback", "text": "A late or missing ASN is charged at 150 CAD per shipment. The charge is waived for the first occurrence in a calendar quarter if the supplier files a corrective action within 5 business days."}, {"id": "P1", "title": "ASN timing", "text": "An advance ship notice (ASN) must be sent by EDI 856 no later than 30 minutes after the truck leaves the supplier dock. A shipment that arrives without an ASN is held at the gate until the ASN is received."}]}}
+{"agent": "policy_writer", "ms": 6634, "tokens": 1885, "type": "text", "text": "A late or missing ASN incurs a charge of 150 CAD per shipment, though this charge is waived for the first occurrence in a calendar quarter if you file a corrective action within five business days [P2]. Additionally, shipments arriving without an ASN will be held at the gate until the notice is received [P1]."}
+{"agent": "policy_critic", "ms": 7384, "tokens": 477, "type": "tool_call", "tool": "exit_loop", "args": {}}
+{"agent": "policy_critic", "ms": 0, "tokens": 0, "type": "tool_result", "tool": "exit_loop", "result": {"result": null}}
+{"type": "turn_end", "tokens": 5736, "ms": 28760}
+{"type": "user", "text": "Can you also check SA-61010 for me?"}
+{"agent": "order_agent", "ms": 7258, "tokens": 2663, "type": "tool_call", "tool": "get_order_status", "args": {"supplier_id": "S-1042", "order_id": "SA-61010"}}
+{"agent": "order_agent", "ms": 7258, "tokens": 2663, "type": "tool_call", "tool": "list_asns", "args": {"supplier_id": "S-1042", "order_id": "SA-61010"}}
+{"agent": "order_agent", "ms": 4, "tokens": 0, "type": "tool_result", "tool": "get_order_status", "result": {"content": [{"type": "text", "text": "{\n  \"found\": false,\n  \"order_id\": \"SA-61010\"\n}"}], "isError": false}}
+{"agent": "order_agent", "ms": 4, "tokens": 0, "type": "tool_result", "tool": "list_asns", "result": {"content": [{"type": "text", "text": "{\n  \"asns\": []\n}"}], "isError": false}}
+{"agent": "order_agent", "ms": 12706, "tokens": 2763, "type": "text", "text": "I cannot find that order for this supplier."}
+{"type": "turn_end", "tokens": 5426, "ms": 19971}
+{"type": "user", "text": "I want to dispute a late ASN charge from last week. Can someone call me?"}
+{"agent": "order_agent", "ms": 467, "tokens": 2819, "type": "tool_call", "tool": "open_ticket", "args": {"supplier_id": "S-1042", "summary": "Dispute for late ASN charge from last week"}}
+{"agent": "order_agent", "ms": 0, "tokens": 0, "type": "tool_result", "tool": "open_ticket", "result": {"opened": true, "ticket_id": "T-7001", "queue": "buyer desk", "sla_hours": 8}}
+{"agent": "order_agent", "ms": 14017, "tokens": 2892, "type": "text", "text": "I have opened a support ticket (T-7001) for your dispute regarding the late ASN charge. A human buyer will review your case and contact you soon."}
+{"type": "turn_end", "tokens": 5711, "ms": 14487}
